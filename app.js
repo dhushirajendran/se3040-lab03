@@ -1,7 +1,18 @@
-const http = require('http');
+const https = require('https');
 
-http.createServer(function (req, res) {
-  res.writeHead(200, {'Content-Type': 'text/html'});
-  res.write('Hello World!');
-  res.end();
-}).listen(8080);
+https.get('https://jsonplaceholder.typicode.com/posts/1', (resp) => {
+  let data = '';
+
+  // Receive data
+  resp.on('data', (chunk) => {
+    data += chunk;
+  });
+
+  // When response ends
+  resp.on('end', () => {
+    console.log(JSON.parse(data));
+  });
+
+}).on('error', (err) => {
+  console.log("Error: " + err.message);
+});
